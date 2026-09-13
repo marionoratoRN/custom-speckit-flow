@@ -190,6 +190,22 @@ su quale oggetto vuole agire, il server verifica che quell'oggetto stia dentro i
 chiama. Serve a impedire che cambiando un identificatore nella richiesta si arrivi ai dati di un
 altro.
 
+### Le politiche che cambiano da progetto a progetto sono configurazione
+
+Quello che varia da un progetto all'altro, o da un cliente all'altro, non si scrive nel codice e
+non si fissa in un documento: si imposta da un pannello di controllo e il sistema legge quel
+valore. Esempi tipici: la lingua dei contenuti generati, le soglie numeriche, le tassonomie, quali
+campi sono obbligatori, quali automatismi sono attivi, chi riceve le notifiche.
+
+Ogni impostazione ha un valore predefinito ragionevole, un posto solo in cui vive (mai la stessa
+impostazione in due punti) e l'indicazione di chi può cambiarla. Quando un comportamento comincia
+a essere richiesto diverso per un caso particolare, diventa un'impostazione, non un ramo `if` nel
+codice.
+
+Vale la regola sulla semplicità: l'impostazione si crea quando la variabilità è reale, cioè ci
+sono almeno due casi concreti o una richiesta esplicita. Non si costruisce un pannello di
+controllo per differenze immaginate.
+
 ### Attivazione delle funzionalità
 
 Le funzionalità sono attivabili singolarmente e restano disattivate per impostazione predefinita.
@@ -217,6 +233,29 @@ localizzazione.
 
 Il codice e i documenti tecnici legacy in italiano si convertono quando vengono toccati, come per
 il limite di righe: nessuna conversione in blocco, ma niente italiano nuovo.
+
+### Domande fatte in modo comprensibile
+
+Chi fa una domanda ha l'onere di renderla comprensibile a chi deve rispondere. Se la risposta
+arriva confusa o fuori bersaglio, la domanda era scritta male: si riformula, non si insiste.
+
+- **Niente sigle e niente codici interni.** Mai scrivere cose come "la D4 espone il principio VII e
+  blocca la S725". Si nomina per esteso di cosa si parla, ogni volta, anche se la stessa cosa è
+  già comparsa prima nella conversazione.
+- **Si parte dalla situazione concreta**: cosa succede oggi, in quale punto del sistema, con quali
+  dati. Poi la scelta da fare. Poi cosa cambia davvero fra un'opzione e l'altra, con un esempio
+  vero preso dal progetto.
+- **I termini tecnici si spiegano** la prima volta che compaiono, in una riga.
+- **Non si dà per scontato** che chi legge ricordi una discussione precedente o abbia in testa lo
+  stesso contesto di chi scrive.
+- **Poche domande per volta.** Elenchi lunghi solo se le domande sono davvero indipendenti fra
+  loro; se la risposta a una cambia le altre, si chiede una cosa alla volta.
+- **Prima di chiedere, si verifica.** Se la risposta si può ricavare guardando il codice, il
+  backlog o la documentazione, si guarda invece di chiedere.
+- **Si chiede solo quando la risposta cambia qualcosa.** Se le opzioni sono equivalenti nei fatti,
+  o se una è chiaramente ragionevole e l'altra no, si sceglie, si dichiara la scelta in una riga e
+  si va avanti. Chiedere una cosa che si poteva decidere da soli sposta un lavoro dalla persona
+  che lo sa fare a quella che non dovrebbe occuparsene.
 
 ### Registro piano
 
