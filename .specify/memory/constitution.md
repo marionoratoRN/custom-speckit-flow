@@ -57,6 +57,11 @@ threshold is split into modules cohesive by responsibility, with a barrel of re-
 preserves the public API. The limit applies to the extracted modules too. Legacy code is brought
 under the threshold when it is touched, with no bulk conversions.
 
+**The limit applies to declarative files too**, database schemas included, not only to code. A
+single schema file is where this rule is most often quietly broken, and where breaking it hurts
+most: everyone touches it, so every change conflicts with every other. Schemas are split per module
+from the first table, using whatever mechanism the chosen ORM provides.
+
 ### Simplicity and iteration
 
 Development is incremental. Nothing is built until it is actually needed: features meant for a
@@ -83,6 +88,21 @@ appear in the menu.
 No framework, ORM, UI library or dependency is introduced without a concrete need that cannot be
 met with what is already there. Every new dependency is justified in the plan and approved. Absent
 a real need, the answer is to reuse.
+
+### Versions are chosen, not inherited
+
+A new project starts on the **current major version** of the things it depends on. Copying a
+scaffold from an older project carries its versions along, and nobody looks at that line again for
+years: that is how a project ends up two majors behind on the day it is born, missing capabilities
+that already exist.
+
+- On the first commit, every major dependency is checked against what is currently released, and the
+  version actually installed is written down, not the range. `^5.8.0` is a floor, not a version:
+  what runs is whatever the lockfile resolved.
+- Upgrades across a major version are a piece of work that gets planned, not something that happens
+  by accident. Staying behind is a decision like any other, and it is recorded with its reason.
+- When a dependency ships a capability behind a preview flag that would solve a problem the project
+  has, that is evaluated when it ships, not discovered years later.
 
 ### External integrations behind adapters
 
