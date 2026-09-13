@@ -5,7 +5,7 @@ activation: when discussing feature implementation or spec-kit commands
 
 # Spec-Kit Workflow
 
-## The 7 commands in order
+## The 8 steps in order
 
 | # | Command | Purpose |
 |---|---------|---------|
@@ -16,13 +16,17 @@ activation: when discussing feature implementation or spec-kit commands
 | 5 | `/speckit.tasks` | Generate executable task list with dependencies and phases |
 | 6 | `/speckit.analyze` | Verify consistency: spec ↔ plan ↔ tasks |
 | 7 | `/speckit.implement` | **THE ONLY command that generates/modifies production code** |
+| 8 | Quality audit | Verify the produced code before declaring the cycle closed |
 
 ## Core Rule
 
-`/speckit.implement` is the **only** command authorized to create or modify
+Medium and large features go through this workflow. Small, focused fixes and minor changes
+may proceed directly (see CLAUDE.md for where the line sits).
+
+Within the workflow, `/speckit.implement` is the **only** step authorized to create or modify
 files in production source directories (`src/`, `apps/`, `shared/`, `infra/`, `.github/`).
 
-If the user asks "implement X" without existing spec/plan/tasks:
+If the user asks "implement X" (a feature) without existing spec/plan/tasks:
 > "To implement X I need the spec first. Shall I launch `/speckit.specify`?"
 
 ## specs/ folder structure
@@ -79,11 +83,27 @@ No spec found for "X". Shall I launch /speckit.specify to create it?
 I'll need: feature description, user goal, constraints.
 ```
 
+## Step 8 — quality audit
+
+`/speckit.implement` finishing is not the end of the cycle. Audit the code that was produced:
+
+- no file over 500 lines
+- coverage at 80% or above, suite green
+- no placeholders, no partial features presented as complete
+- no duplicated logic, no business logic leaked into a client
+- no external-provider details outside their adapter
+- no secrets; code and technical docs in English; constitution principles respected
+
+Refactor whatever the audit finds **before** declaring the cycle closed. If something cannot be
+fixed inside the cycle, justify the exception, get it approved, and record it as a task with a
+deadline. Report the audit result explicitly: what was checked, what was found, what was fixed.
+
 ## Safety Rules
 
-- ❌ Never generate code without approved spec+plan+tasks
-- ❌ Never skip workflow phases even if it "seems simple"
+- ❌ Never generate code for a feature without approved spec+plan+tasks
+- ❌ Never skip workflow phases for a feature, even if it "seems simple"
 - ❌ Never modify already-approved spec/plan without a new clarify cycle
 - ✅ Reading and explaining any existing spec is always allowed
 - ✅ Suggesting improvements to specs is always allowed
 - ✅ Creating/modifying files in `specs/` and `.specify/` is always allowed
+- ❌ Never declare a cycle closed without running the quality audit
