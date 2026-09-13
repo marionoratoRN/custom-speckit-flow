@@ -89,20 +89,30 @@ No framework, ORM, UI library or dependency is introduced without a concrete nee
 met with what is already there. Every new dependency is justified in the plan and approved. Absent
 a real need, the answer is to reuse.
 
-### Versions are chosen, not inherited
+### A version number is never written from memory
 
-A new project starts on the **current major version** of the things it depends on. Copying a
-scaffold from an older project carries its versions along, and nobody looks at that line again for
-years: that is how a project ends up two majors behind on the day it is born, missing capabilities
-that already exist.
+Whoever writes a dependency version looks it up in the registry at that moment. This applies to
+people and applies with particular force to models: a model writing `^5.8.0` is recalling a number
+that was common in its training data, with no way of knowing that two major versions have shipped
+since. The number looks deliberate and is not.
 
-- On the first commit, every major dependency is checked against what is currently released, and the
-  version actually installed is written down, not the range. `^5.8.0` is a floor, not a version:
-  what runs is whatever the lockfile resolved.
-- Upgrades across a major version are a piece of work that gets planned, not something that happens
-  by accident. Staying behind is a decision like any other, and it is recorded with its reason.
+The evidence this rule comes from: two unrelated projects in this organisation, written months apart
+with no shared scaffold, both declare Prisma `^5.8.0`, a version from January 2024. One of them was
+started three days after Prisma 7.0 was released. The same codebase declares Express `^4.18.2`, from
+April 2022, while Express 5 has been out for a year. Nobody chose those numbers; they were
+remembered.
+
+- On the first commit, and whenever a dependency is added, the current version is **checked against
+  the registry**, not recalled. `npm view <package> version` costs a second.
+- The version written down is the **installed** one, from the lockfile, not the range. `^5.8.0` is a
+  floor and says nothing about what runs.
+- **An automated check enforces it**, because a version number is machine checkable and therefore
+  gets machine checked: CI fails when a direct dependency is more than one major behind what the
+  registry currently publishes.
+- Staying behind on purpose is a decision like any other, recorded with its reason, and the check is
+  told about it rather than being switched off.
 - When a dependency ships a capability behind a preview flag that would solve a problem the project
-  has, that is evaluated when it ships, not discovered years later.
+  has, it is evaluated when it ships, not discovered years later.
 
 ### External integrations behind adapters
 
