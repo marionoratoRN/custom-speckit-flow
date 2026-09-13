@@ -117,6 +117,34 @@ The rules that prevent it:
   functions without being told where they are. That last check is the only one that needs a human
   and it takes five minutes.
 
+### The tracking plan is designed once, not accumulated
+
+The same structural failure as the navigation, in a different place. Each feature emits the events
+it happens to need, named however the person writing it named them, and nobody owns the whole. After
+thirty features the same action is tracked under three names, a property called `user_id` means one
+thing in one event and something else in another, and the first time somebody asks a question of the
+data it turns out the data cannot answer it. Product analytics tools and lifecycle messaging tools
+sit downstream of this: they faithfully report whatever mess reaches them.
+
+- **One tracking plan, and it is the source of truth.** A single versioned file declares every
+  event: its name, when it fires, the properties it carries and what each property means. The code
+  emits events through that declaration, not through free-form strings.
+- **An event is declared before it is emitted.** **An automated test fails when the code emits an
+  event that is not in the plan, or when a declared event carries properties the plan does not
+  list.** This is what keeps the plan honest; without it, it becomes documentation of what somebody
+  intended a year ago.
+- **Naming is a convention, not a decision per event.** One shape for every name, one vocabulary
+  drawn from the domain the users work in, and the same property means the same thing everywhere.
+- **A spec that adds a user-visible behaviour says what it makes measurable**, or says explicitly
+  that it makes nothing measurable, which is also an answer. Deciding while specifying costs
+  nothing; instrumenting afterwards means shipping and waiting another month for data.
+- **Events are removed like code.** An event nobody has queried in a year is deleted from the plan
+  and from the code, rather than being kept because deleting it feels risky.
+
+The role that owns this is product analytics, not data engineering: the two are often confused, and
+the second one is about pipelines and warehouses while this is about deciding what is worth
+recording in the first place.
+
 ### New dependencies
 
 No framework, ORM, UI library or dependency is introduced without a concrete need that cannot be
