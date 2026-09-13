@@ -382,10 +382,23 @@ as actually critical. A serious thing is said once, plainly, and then you move o
 1. Medium and large features are specified with spec-kit before implementation, following the flow
    `specify → clarify → plan → tasks → analyze → implement`. Focused fixes and minor changes proceed
    directly. Inside the flow, `implement` is the only step that creates or modifies production code.
-2. Significant design decisions (data model, choice of an external adapter, deviations from the
+2. **A spec is written just before its feature is built.** A spec written far ahead of its
+   implementation is a **sketch**, and it says so at the top, with the date it was written and an
+   instruction to refresh it before planning. What holds intent durably is the backlog entry; a spec
+   becomes authoritative when its feature is next.
+
+   Sketching several features at once is worth doing when it reveals boundaries, dependencies or
+   gaps that were invisible one feature at a time. What it does not do is produce artifacts that
+   stay true: a sketch stops matching reality the moment anything is learned, and the danger is not
+   that it is wrong, it is that it looks finished.
+
+   Refreshing a sketch belongs to `clarify`: everything learned since it was written is exactly what
+   there is to clarify. A spec that has been planned and is being implemented is kept current in the
+   same pull request as the code, like every other document that diverges.
+3. Significant design decisions (data model, choice of an external adapter, deviations from the
    principles) are documented in the plan and checked against this constitution (Constitution
    Check).
-3. **Quality audit before closing the cycle.** At the end of every spec-kit cycle, before declaring
+4. **Quality audit before closing the cycle.** At the end of every spec-kit cycle, before declaring
    it closed, an audit runs over the code produced. It checks at least:
    - file size under the threshold;
    - test coverage at 80% or above, with the suite green;
@@ -399,8 +412,8 @@ as actually critical. A serious thing is said once, plainly, and then you move o
    Whatever the audit finds is refactored before closing. The cycle is not declared closed while
    findings remain open. If something cannot be resolved within the cycle, the exception is
    justified and approved, and becomes a recorded task with a deadline.
-4. Database schema changes are applied before the code that uses them.
-5. Deployment to the development environment happens after every completed feature, for validation,
+5. Database schema changes are applied before the code that uses them.
+6. Deployment to the development environment happens after every completed feature, for validation,
    before promotion to production.
 
 ## Governance
