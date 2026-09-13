@@ -93,18 +93,34 @@ know about the first, and functions buried three levels deep where nobody finds 
 
 The rules that prevent it:
 
-- **One navigation map, and it is the source of truth.** A single versioned file declares every
-  section, every entry, the route it points at and what it is for. The interface builds its menu
-  from that file, never from routes discovered around the codebase. A screen that is not in the map
-  does not exist; an entry in the map with no screen is a bug. **An automated test enumerates the
-  application's routes and fails when the two disagree.** This is what makes a duplicate visible in
-  a diff instead of six months later.
+- **The catalogue of pages lives in code; the arrangement of the menu is configuration.** These are
+  two different things and conflating them is what makes menus rot.
+
+  The **catalogue** is a single versioned file declaring every page: the route, and what the page is
+  for. It is the source of truth for what exists, it changes only through a reviewed diff, and
+  **an automated test enumerates the routes the application serves and fails when the two
+  disagree**. A page not in the catalogue does not exist; a catalogue entry with no page is a bug.
+  This is what makes a duplicate visible in a diff instead of six months later.
+
+  The **arrangement** is which sections exist, in what order, with what label, visible to whom. It
+  is stored rather than compiled, so it can differ per product and per role and can change without
+  a deploy. It may only reference pages that exist in the catalogue: a stored entry pointing at an
+  unknown page is rejected when it is written and reported, never silently dropped. Changes to the
+  arrangement are recorded with their author, like every other decision.
+
+  The dividing line is simple: **the arrangement can rearrange, rename, group and hide, and it can
+  never create.** Creating a page is code, and code goes through review.
 - **Two levels, not three.** Every function is reachable in at most two steps from the home: a
   section, then a page. A third level requires a recorded exception with its reason. Depth is the
   mechanism by which a working feature becomes an invisible one.
 - **One home per capability.** A capability lives in exactly one place. Shortcuts from elsewhere are
   welcome, but they link to that place and never reimplement it. Two pages that do almost the same
   thing are one page that someone has not merged yet.
+- **Text shown to a user goes through localisation from the first screen.** Menu labels included.
+  Not because every project ships in several languages, but because retrofitting localisation means
+  touching every string in the product at once, which is the kind of change nobody schedules and
+  everybody postpones. Starting with one language costs a wrapper; adding the second then costs a
+  file.
 - **Sections are named after what people do, not after how the code is organised.** A menu that
   mirrors the module structure is a menu designed for the people who wrote the code. The words come
   from the vocabulary the users already use for their own work.
