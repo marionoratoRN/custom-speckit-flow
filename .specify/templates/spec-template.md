@@ -114,21 +114,23 @@
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
 
-## Strategia di test (TDD / test-first) *(mandatory)*
+## Test Strategy (TDD, test-first) *(mandatory)*
 
 <!--
-  ACTION REQUIRED: ogni spec DEVE definire l'impostazione test-first (constitution §V).
-  I test si scrivono PRIMA dell'implementazione. Adattare per feature di sola UI/design
-  (non-regressione visiva + criteri verificabili al posto di unit/integration/e2e).
+  ACTION REQUIRED: every spec MUST define its test-first setup (see the constitution,
+  "Test prima del codice"). Tests are written BEFORE the implementation. Adapt for UI or
+  design-only features: visual non-regression plus verifiable criteria in place of
+  unit/integration/e2e.
 -->
 
-> **Vincolo (constitution §V Test-First):** i test si scrivono PRIMA dell'implementazione; nessun codice di feature senza un test che fallisce a guidarlo.
+> **Constraint (constitution, Test before code):** tests are written BEFORE the implementation.
+> No feature code without a failing test driving it.
 
-- **Ciclo red-green-refactor:** test che fallisce (*red*) → implementazione minima (*green*) → refactor a test verdi.
-- **Mappa scenari → test:** ogni *Acceptance Scenario* (Given/When/Then) e ogni *FR-XXX* DEVE avere ≥1 test automatizzato corrispondente, scritto prima del codice.
-- **Livelli:** *unit* (logica/calcoli), *integration* (API/flussi/persistenza, **dati sensibili/sanitari**), *e2e* (user journey della **User Story P1**). *(UI/design: non-regressione visiva + criteri verificabili.)*
-- **Coverage (constitution §V):** ≥80% backend, ≥60% mobile; integration **obbligatori** per auth e dati sanitari.
-- **Definition of Done:** una User Story è "done" solo quando i suoi test — scritti prima — passano in CI.
+- **Red-green-refactor cycle:** a failing test (*red*), the minimum implementation that passes it (*green*), then refactoring with the tests green.
+- **Scenario to test mapping:** every *Acceptance Scenario* (Given/When/Then) and every *FR-XXX* MUST have at least one matching automated test, written before the code.
+- **Levels:** *unit* (logic and computation), *integration* (API, flows, persistence, sensitive data), *e2e* (the user journey of **User Story P1**). For UI and design work: visual non-regression plus verifiable criteria.
+- **Coverage:** at least 80% across all code; integration tests **mandatory** on API endpoints, payment flows and the handling of sensitive data.
+- **Definition of Done:** a User Story is done only when its tests, written first, pass in CI.
 
 ## Assumptions
 

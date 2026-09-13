@@ -1,311 +1,325 @@
 <!-- Sync Impact Report
-Version change: (nuovo) → 1.1.0
-Added: sezioni "Regole generali di sviluppo", "Flusso di lavoro" e "Governo", precompilate.
-Origine: constitution di GoalMate 1.4.0 e di Voxli Platform 2.0.0 (callcenterai), tenendo solo le
-regole non legate a quei prodotti. Escluse: Mobile-First, Community-Centric, Italian Localization,
-Operatore-First, multi-surface UX, isolamento multi-vertical, e tutti i vincoli di stack.
-Note: la sezione "Principi di progetto" resta da riempire con /speckit.constitution.
+Version change: 1.1.0 → 2.0.0 (MAJOR - the language rule was redefined incompatibly)
+Modified (Language): everything in the repository is English, including governance documents,
+commit messages and pull request descriptions. Two exceptions: conversation with the team, and
+strings shown to the end user.
+Modified: the whole file is now written in English, as the rule requires.
+Note: the "Project principles" section is still to be filled in with /speckit.constitution.
 -->
 
 # Project Constitution
 
-> Questo file ha due parti. **Regole generali di sviluppo**, **Flusso di lavoro** e **Governo**
-> sono il patrimonio comune a tutti i progetti: si conservano quando si rigenera il file con
-> `/speckit.constitution`. **Principi di progetto** è la parte da riempire, ed è quella che cambia
-> da un progetto all'altro.
+> This file has two parts. **General development rules**, **Workflow** and **Governance** are the
+> shared baseline across projects: they are preserved when the file is regenerated with
+> `/speckit.constitution`. **Project principles** is the part to fill in, and the part that changes
+> from one project to the next.
 >
-> Ogni spec, plan e task si allinea a entrambe le parti.
+> Every spec, plan and task aligns with both parts.
 
 ---
 
-## Principi di progetto
+## Project principles
 
-<!-- Da riempire con /speckit.constitution.
-     Qui vanno i principi che dipendono dal dominio: cosa viene prima, cosa non si fa mai,
-     quali vincoli legali o di prodotto governano le scelte. Numerarli in romano (I, II, III...)
-     e scrivere per ognuno una regola verificabile, non un'intenzione. -->
+<!-- To be filled in with /speckit.constitution.
+     This is where the domain dependent principles go: what comes first, what is never done, which
+     legal or product constraints govern the choices. Number them in roman numerals (I, II, III...)
+     and write each one as a verifiable rule, not as an intention. -->
 
 ---
 
-## Regole generali di sviluppo
+## General development rules
 
-Valgono per ogni progetto e non dipendono dal dominio.
+These hold for every project and do not depend on the domain.
 
-### Test prima del codice
+### Tests before code
 
-Si sviluppa in TDD: il test si scrive prima del codice, nell'ordine rosso, verde, refactor. Tutto
-il codice è coperto da unit test per almeno l'80 per cento. Gli integration test sono obbligatori
-per gli endpoint delle API, i flussi di pagamento e il trattamento di dati sensibili.
+Development is test driven: the test is written before the code, in the order red, green, refactor.
+All code is covered by unit tests to at least 80%. Integration tests are mandatory for API
+endpoints, payment flows and the handling of sensitive data.
 
-La logica pura ha test deterministici. L'I/O (database, rete, SDK) si mocka.
+Pure logic has deterministic tests. I/O (database, network, SDKs) is mocked.
 
-Per i refactoring a comportamento invariato si scrivono characterization test prima di spostare o
-spezzare il codice, e si verificano verdi prima e dopo (golden master). Nessuno split o
-estrazione senza rete di test verde.
+For behaviour preserving refactoring, characterization tests are written before moving or splitting
+the code, and are verified green before and after (golden master). No split, no extraction without
+a green safety net.
 
-### I test girano su runner propri
+### Tests run on our own runners
 
-La CI gira su **runner self-hosted registrati sul VPS**, non sui runner ospitati dal fornitore di
-CI. I job si assegnano con l'etichetta del runner (convenzione in uso: `[self-hosted, ci]`). Il
-motivo è avere un ambiente stabile, con le dipendenze di sistema e i servizi già presenti, e non
-dipendere dai tempi e dai limiti dei runner condivisi.
+CI runs on **self-hosted runners registered on the VPS**, not on the runners hosted by the CI
+provider. Jobs are assigned by runner label (convention in use: `[self-hosted, ci]`). The reason is
+a stable environment, with system dependencies and services already present, and independence from
+the timing and limits of shared runners.
 
-### Dimensione dei file
+### File size
 
-Nessun file di codice supera le **500 righe**, con obiettivo fra 300 e 500. Un file che cresce
-oltre la soglia si spezza in moduli coesi per responsabilità, con un barrel di re-export dove
-serve a preservare l'API pubblica. Il limite vale anche per i moduli estratti. Il codice legacy si
-riconduce sotto soglia quando lo si tocca, senza conversioni in blocco.
+No source file goes over **500 lines**, with 300 to 500 as the target. A file that grows past the
+threshold is split into modules cohesive by responsibility, with a barrel of re-exports where that
+preserves the public API. The limit applies to the extracted modules too. Legacy code is brought
+under the threshold when it is touched, with no bulk conversions.
 
-### Semplicità e iterazione
+### Simplicity and iteration
 
-Sviluppo incrementale. Non si costruisce una cosa finche non serve davvero: le funzionalità
-pensate per una fase successiva non si anticipano, e non si aggiunge un'astrazione finche non ci
-sono almeno due casi concreti che la richiedono. Un requisito dichiarato vale come caso concreto,
-una previsione no.
+Development is incremental. Nothing is built until it is actually needed: features meant for a
+later phase are not anticipated, and no abstraction is added until there are at least two concrete
+cases requiring it. A stated requirement counts as a concrete case, a prediction does not.
 
-Ogni pull request risolve un problema concreto. Si preferisce una soluzione semplice e testata a
-un'architettura elaborata.
+Every pull request solves a concrete problem. A simple, tested solution is preferred to an elaborate
+architecture.
 
-### Perimetro ristretto ma completo
+### Narrow but complete scope
 
-Meglio un perimetro piu stretto e completo che uno ampio con buchi operativi. Quando il sistema
-sostituisce un processo esistente, copre il cento per cento di ciò che serve a quel processo per
-funzionare davvero. Le esclusioni si approvano, non si scoprono in produzione.
+Better a narrower scope that is complete than a wide one with operational holes. When the system
+replaces an existing process, it covers 100% of what that process needs to actually work.
+Exclusions are approved, not discovered in production.
 
-### Niente placeholder
+### No placeholders
 
-Mai funzionalità placeholder, integrazioni fittizie, opzioni non implementate o funzionalità
-parziali presentate come complete. Ogni elemento visibile nell'interfaccia funziona. Se una cosa
-non è pronta non compare nel menu.
+Never placeholder features, fake integrations, unimplemented options or partial features presented
+as complete. Every element visible in the interface works. If something is not ready, it does not
+appear in the menu.
 
-### Nuove dipendenze
+### New dependencies
 
-Non si introducono framework, ORM, librerie di interfaccia o dipendenze senza una necessità
-concreta non risolvibile con quello che c'è già. Ogni nuova dipendenza si motiva nel piano e si fa
-approvare. In assenza di necessità reale la risposta è riusare.
+No framework, ORM, UI library or dependency is introduced without a concrete need that cannot be
+met with what is already there. Every new dependency is justified in the plan and approved. Absent
+a real need, the answer is to reuse.
 
-### Integrazioni esterne dietro adapter
+### External integrations behind adapters
 
-Ogni integrazione con un servizio esterno vive in un adapter dedicato. La logica di business
-dipende da un'interfaccia astratta, non dal fornitore concreto. Nessun dettaglio specifico del
-fornitore (endpoint, formati, stranezze del protocollo) esce dal suo adapter. Così il fornitore
-resta sostituibile e il raggio d'impatto di un suo cambiamento resta confinato.
+Every integration with an external service lives in a dedicated adapter. Business logic depends on
+an abstract interface, not on the concrete provider. No provider specific detail (endpoints,
+formats, protocol quirks) leaves its adapter. That keeps the provider replaceable and confines the
+blast radius of a change on their side.
 
-### La logica di business è del backend
+### Business logic belongs to the backend
 
-Dove esiste un backend, è lui l'owner della logica e delle integrazioni. I client consumano le sue
-API e non reimplementano la stessa logica. Tutto ciò che tocca segreti, token o credenziali vive
-nel backend e mai nel frontend. La specifica OpenAPI si aggiorna a ogni modifica di un endpoint,
-generata automaticamente dove possibile.
+Where a backend exists, it owns the logic and the integrations. Clients consume its APIs and do not
+reimplement the same logic. Anything touching secrets, tokens or credentials lives in the backend
+and never in the frontend. The OpenAPI specification is updated on every endpoint change, generated
+automatically where possible.
 
-Il principio riguarda la proprietà della logica, non la topologia del deploy: il backend può essere
-diviso in moduli o processi, purche la logica resti unica.
+The principle is about ownership of the logic, not deployment topology: the backend may be split
+into modules or processes, as long as the logic stays in one place.
 
-### Una sola fonte di verità
+### One source of truth
 
-Niente sistemi paralleli e niente copie divergenti degli stessi dati. Ciò che un componente scrive
-è immediatamente visibile agli altri, perche leggono la stessa fonte.
+No parallel systems and no diverging copies of the same data. What one component writes is
+immediately visible to the others, because they read the same source.
 
-### Collezioni di richieste versionate
+### Versioned request collections
 
-Ogni funzionalità che aggiunge o modifica endpoint fornisce le collezioni di richieste per la
-verifica manuale ed esplorativa. Convenzione in uso: Bruno, file `.bru` versionati sotto la
-cartella dell'API, con le variabili d'ambiente in una cartella separata. Sono strumenti di
-sviluppo e non vengono deployati.
+Every feature that adds or changes endpoints ships the request collections for manual and
+exploratory verification. Convention in use: Bruno, `.bru` files versioned under the API folder,
+with the environment variables in a separate folder. They are development tools and are not
+deployed.
 
 ### Branching
 
-- `main` è produzione. Ogni merge su `main` è una release.
-- `develop` è il ramo di integrazione, da cui si deploya l'ambiente di sviluppo.
-- `feature/<nome>` parte da `develop` e viene mergiato in `develop`.
-- `release/<x.y.z>` è opzionale, per stabilizzare prima di andare su `main`.
-- `hotfix/<nome>` parte da `main`, e va mergiato sia su `main` sia su `develop`.
+- `main` is production. Every merge into `main` is a release.
+- `develop` is the integration branch, and the development environment deploys from it.
+- `feature/<name>` starts from `develop` and is merged into `develop`.
+- `release/<x.y.z>` is optional, to stabilise before going to `main`.
+- `hotfix/<name>` starts from `main` and is merged into both `main` and `develop`.
 
-Regole:
+Rules:
 
-- Mai committare direttamente su `main` o su `develop`.
-- Subito dopo il merge su `develop`, la stessa feature si porta su `main` con un ramo isolato che
-  parte da `main` e prende i commit di quella sola feature (cherry-pick), con pull request verso
-  `main`. Si propone di propria iniziativa: il merge su `develop` è metà del lavoro, non la fine.
-- Mai portare `develop` dentro `main` in blocco. Un travaso di decine di commit non correlati non
-  è una release, e porta su anche i lavori tenuti fermi di proposito. Si rilascia una feature per
-  volta.
-- I merge su `main` sono `--no-ff`, con tag di versione.
+- Never commit directly to `main` or to `develop`.
+- Right after the merge into `develop`, the same feature is carried to `main` on an isolated branch
+  that starts from `main` and takes the commits of that feature alone (cherry-pick), with a pull
+  request against `main`. This is proposed unprompted: the merge into `develop` is half the work,
+  not the end of it.
+- Never merge `develop` into `main` in bulk. Moving dozens of unrelated commits is not a release,
+  and it drags along work that was deliberately held back. One feature is released at a time.
+- Merges into `main` are `--no-ff`, with a version tag.
 
-### Un worktree per lavoro
+### One worktree per piece of work
 
-Ogni sessione che modifica codice avviene in un git worktree dedicato, mai nel repository
-principale. Una feature o un refactor uguale un worktree, creato a partire da `develop`. Il
-repository principale non si usa come area di lavoro mentre ci sono worktree attivi. Il merge
-avviene via pull request, e il worktree si rimuove a lavoro finito.
+Every session that modifies code happens in a dedicated git worktree, never in the main repository.
+One feature or one refactor equals one worktree, created from `develop`. The main repository is not
+used as a working area while worktrees are active. Merging happens through a pull request, and the
+worktree is removed when the work is done.
 
-### Revisione del codice
+### Code review
 
-Ogni pull request richiede almeno una revisione prima del merge.
+Every pull request needs at least one review before merging.
 
-### Pipeline di CI
+### CI pipeline
 
-Su ogni pull request: lint, controllo dei tipi, unit test, integration test.
+On every pull request: lint, type check, unit tests, integration tests.
 
-### Migrazioni del database
+### Database migrations
 
-Le migrazioni sono forward only: additive, retro compatibili e idempotenti, applicate una sola
-volta in modo deterministico con lo stesso meccanismo in CI e al deploy. **Si applicano prima del
-codice che le usa.** Il rollback è applicativo (ripristino del commit precedente e riavvio), non
-sullo schema. I cambi distruttivi come drop e rename si eseguono in passi retro compatibili
-secondo il pattern expand e contract, mai nello stesso deploy del codice che li richiede.
+Migrations are forward only: additive, backward compatible and idempotent, applied exactly once,
+deterministically, by the same mechanism in CI and at deploy time. **They are applied before the
+code that uses them.** Rollback is at the application level (restore the previous commit and
+restart), not on the schema. Destructive changes such as drop and rename are performed in backward
+compatible steps following the expand and contract pattern, never in the same deploy as the code
+that requires them.
 
-### Operazioni pericolose e irreversibili
+### Dangerous and irreversible operations
 
-Le operazioni pericolose chiedono conferma o avvisano, ma non lasciano mai l'operatore bloccato in
-modo irrecuperabile. Le operazioni irreversibili sono idempotenti o deduplicate, così una doppia
-esecuzione non produce un doppio effetto. Le azioni verso ambienti condivisi (deploy, migrazioni,
-azioni distruttive) si espongono e si confermano prima di eseguirle.
+Dangerous operations ask for confirmation or warn, but never leave the operator unrecoverably
+stuck. Irreversible operations are idempotent or deduplicated, so a double execution does not
+produce a double effect. Actions against shared environments (deploys, migrations, destructive
+actions) are surfaced and confirmed before they run.
 
 ### Deploy
 
-Il deploy avviene solo via git: commit, push, pull sul server, rebuild. Mai scp, rsync o copia
-diretta di file sul server. Gli ambienti di sviluppo e di produzione restano separati.
+Deployment happens only through git: commit, push, pull on the server, rebuild. Never scp, rsync or
+direct file copying onto the server. Development and production environments stay separate.
 
-### Segreti
+### Secrets
 
-Nessun segreto nel codice. In locale variabili d'ambiente in un file non versionato, in produzione
-un gestore di segreti. Un controllo automatico fallisce la build se trova un segreto nel
-repository. Segreti, token e credenziali sono cifrati a riposo e non compaiono mai in chiaro in
-interfacce, risposte delle API o log.
+No secret in the code. Locally, environment variables in an unversioned file; in production, a
+secret manager. An automated check fails the build if it finds a secret in the repository. Secrets,
+tokens and credentials are encrypted at rest and never appear in clear text in interfaces, API
+responses or logs.
 
-### Controllo degli accessi e traccia di audit
+### Access control and audit trail
 
-Le operazioni sensibili sono protette dal controllo del ruolo, non dalla sola autenticazione.
-Sensibili sono quelle distruttive e quelle che toccano permessi, denaro, configurazioni o dati
-personali. Ogni esecuzione lascia una riga in un registro append only: chi, cosa, quando, su quale
-oggetto, con che esito. Il registro non si modifica e non si cancella.
+Sensitive operations are protected by a role check, not by authentication alone. Sensitive means
+destructive operations and those touching permissions, money, configuration or personal data. Every
+execution leaves a row in an append only log: who, what, when, on which object, with what outcome.
+The log is never modified and never deleted.
 
-### L'identità viene dalla sessione
+### Identity comes from the session
 
-L'identità di chi fa una richiesta, e il perimetro di dati a cui ha diritto, si ricavano sempre
-dalla sessione o dal token, mai da un campo del corpo della richiesta o della query. Il client dice
-su quale oggetto vuole agire, il server verifica che quell'oggetto stia dentro il perimetro di chi
-chiama. Serve a impedire che cambiando un identificatore nella richiesta si arrivi ai dati di un
-altro.
+The identity of the caller, and the scope of data they are entitled to, always come from the
+session or the token, never from a field in the request body or query. The client says which object
+it wants to act on, the server verifies that the object falls inside the caller's scope. This
+prevents reaching another party's data by changing an identifier in the request.
 
-### Le politiche che cambiano da progetto a progetto sono configurazione
+### Policies that change from project to project are configuration
 
-Quello che varia da un progetto all'altro, o da un cliente all'altro, non si scrive nel codice e
-non si fissa in un documento: si imposta da un pannello di controllo e il sistema legge quel
-valore. Esempi tipici: la lingua dei contenuti generati, le soglie numeriche, le tassonomie, quali
-campi sono obbligatori, quali automatismi sono attivi, chi riceve le notifiche.
+What varies from one project or one customer to another is not written in the code and not fixed in
+a document: it is set from a control panel and the system reads that value. Typical examples: the
+language of generated content, numeric thresholds, taxonomies, which fields are mandatory, which
+automations are on, who receives notifications.
 
-Ogni impostazione ha un valore predefinito ragionevole, un posto solo in cui vive (mai la stessa
-impostazione in due punti) e l'indicazione di chi può cambiarla. Quando un comportamento comincia
-a essere richiesto diverso per un caso particolare, diventa un'impostazione, non un ramo `if` nel
-codice.
+Every setting has a sensible default, exactly one place where it lives (never the same setting in
+two places), and a stated owner who can change it. When a behaviour starts being requested
+differently for a particular case, it becomes a setting, not an `if` branch in the code.
 
-Vale la regola sulla semplicità: l'impostazione si crea quando la variabilità è reale, cioè ci
-sono almeno due casi concreti o una richiesta esplicita. Non si costruisce un pannello di
-controllo per differenze immaginate.
+The simplicity rule applies: a setting is created when the variability is real, meaning there are at
+least two concrete cases or an explicit request. No control panel is built for imagined differences.
 
-### Attivazione delle funzionalità
+### Feature activation
 
-Le funzionalità sono attivabili singolarmente e restano disattivate per impostazione predefinita.
-Nessuna interfaccia compare per una funzionalità non attiva.
+Features are individually switchable and stay off by default. No interface appears for a feature
+that is not active.
 
-### Dati personali
+### Personal data
 
-Se il progetto tratta dati personali: finalità dichiarata, crittografia a riposo e in transito per
-i dati sensibili, hosting nell'Unione Europea, consenso esplicito, diritto all'oblio previsto
-dalla prima versione, nessuna condivisione con terze parti senza consenso. Se tratta dati
-particolari ai sensi dell'articolo 9 del GDPR (salute, biometrici, e simili), questo diventa un
-principio di progetto con requisiti espliciti in ogni spec che li tocca.
+If the project handles personal data: a stated purpose, encryption at rest and in transit for
+sensitive data, hosting in the European Union, explicit consent, the right to erasure available from
+the first version, no sharing with third parties without consent. If it handles special category
+data under Article 9 GDPR (health, biometrics and the like), that becomes a project principle with
+explicit requirements in every spec that touches it.
 
-### Lingua
+### Language
 
-Codice e documentazione tecnica sono in **inglese**: identificatori, commenti, nomi di file, di
-funzioni e di tipi, messaggi di log tecnici, artefatti spec-kit (`specs/**`, contracts, checklist)
-e README. Niente italiano nel codice e nessuna parola inglese italianizzata.
+**Everything in this repository is written in English**: code, comments, identifiers, file names,
+technical log messages, spec-kit artifacts (`specs/**`, contracts, checklists), documentation,
+governance documents, README files, commit messages and pull request descriptions. No Italian in
+the repository, and no Italian words dressed up as English.
 
-Sono esenti dal vincolo, e seguono la lingua del team: la comunicazione (chat, descrizioni
-discorsive delle pull request) e i documenti di governo (`constitution.md`,
-`product-foundation.md`, `spec-backlog.md`, `CLAUDE.md`). Sono esenti anche le stringhe rivolte
-all'utente finale, che comunque non si scrivono a mano nel codice ma passano dal sistema di
-localizzazione.
+Two exceptions, and only two:
 
-Il codice e i documenti tecnici legacy in italiano si convertono quando vengono toccati, come per
-il limite di righe: nessuna conversione in blocco, ma niente italiano nuovo.
+- **Conversation with the team** happens in whatever language the team speaks.
+- **Strings shown to the end user**, which are never hardcoded anyway: they go through the
+  localisation system or the per product configuration. Tickets generated on a tracker are the case
+  in point: English by default, and bilingual English plus the team's language when some members of
+  that team do not read English.
 
-### Domande fatte in modo comprensibile
+Legacy code and documents in another language are converted when they are touched, like the line
+limit: no bulk conversion, but no new non-English content.
 
-Chi fa una domanda ha l'onere di renderla comprensibile a chi deve rispondere. Se la risposta
-arriva confusa o fuori bersaglio, la domanda era scritta male: si riformula, non si insiste.
+### Questions asked in an understandable way
 
-- **Niente sigle e niente codici interni.** Mai scrivere cose come "la D4 espone il principio VII e
-  blocca la S725". Si nomina per esteso di cosa si parla, ogni volta, anche se la stessa cosa è
-  già comparsa prima nella conversazione.
-- **Si parte dalla situazione concreta**: cosa succede oggi, in quale punto del sistema, con quali
-  dati. Poi la scelta da fare. Poi cosa cambia davvero fra un'opzione e l'altra, con un esempio
-  vero preso dal progetto.
-- **I termini tecnici si spiegano** la prima volta che compaiono, in una riga.
-- **Non si dà per scontato** che chi legge ricordi una discussione precedente o abbia in testa lo
-  stesso contesto di chi scrive.
-- **Poche domande per volta.** Elenchi lunghi solo se le domande sono davvero indipendenti fra
-  loro; se la risposta a una cambia le altre, si chiede una cosa alla volta.
-- **Prima di chiedere, si verifica.** Se la risposta si può ricavare guardando il codice, il
-  backlog o la documentazione, si guarda invece di chiedere.
-- **Si chiede solo quando la risposta cambia qualcosa.** Se le opzioni sono equivalenti nei fatti,
-  o se una è chiaramente ragionevole e l'altra no, si sceglie, si dichiara la scelta in una riga e
-  si va avanti. Chiedere una cosa che si poteva decidere da soli sposta un lavoro dalla persona
-  che lo sa fare a quella che non dovrebbe occuparsene.
+Whoever asks a question carries the burden of making it understandable to whoever must answer. If
+the answer comes back confused or off target, the question was badly written: rephrase it, do not
+insist.
 
-### Registro piano
+- **No acronyms and no internal codes.** Never write things like "D4 exposes principle VII and
+  blocks S725". Name what you are talking about in full, every time, even if it already appeared
+  earlier in the conversation.
+- **Start from the concrete situation**: what happens today, in which part of the system, with which
+  data. Then the choice to make. Then what actually changes between one option and another, with a
+  real example taken from the project.
+- **Explain technical terms** the first time they appear, in one line.
+- **Do not assume** the reader remembers an earlier discussion or holds the same context as the
+  writer.
+- **Few questions at a time.** Long lists only when the questions are genuinely independent; if the
+  answer to one changes the others, ask one thing at a time.
+- **Check before asking.** If the answer can be found by looking at the code, the backlog or the
+  documentation, look instead of asking.
+- **Only ask when the answer changes something.** If the options are equivalent in practice, or if
+  one is clearly reasonable and the other is not, choose, state the choice in one line, and move on.
+  Asking something you could have decided yourself moves work from the person who knows how to do it
+  to the person who should not have to.
 
-Si scrive in modo piano e fattuale, nei documenti e nelle risposte. I vincoli e le dipendenze si
-dichiarano come fatti.
+### Do not get stuck on what does not block
 
-I blocchi esistono e vanno detti quando ci sono. Quello che non serve è il registro solenne
-costruito per creare urgenza: "blocca ogni progresso", "non negoziabile", "azione immediata",
-"determina il successo o il fallimento", il grassetto usato per alzare la voce. Se tutto suona
-critico non si distingue piu cosa lo è davvero. Una cosa seria si dice una volta, in modo asciutto,
-e poi si passa oltre.
+A missing piece of data, an access, a file, a decision: carry on with everything else and come back
+to it later. You stop only when, without that thing, the work that follows would have to be redone
+from scratch, and in that case you say it once and move to the next piece of work.
+
+- A missing thing is recorded where it matters, together with the assumption taken in its place, and
+  the work continues. It is not brought up again in every message.
+- A gap does not become a theme: no repeated lists of what is missing, no reminders about things
+  already flagged, no passive waiting.
+- Priority is not decided by whoever is working on the piece: if something looks important but
+  nobody asked for it now, note it and move on.
+- Marginal issues are noted and left alone. A detail corrected at the wrong moment costs more than
+  it is worth.
+
+### Plain register
+
+Write plainly and factually, in documents and in replies. Constraints and dependencies are stated as
+facts.
+
+Blockers exist and are named when they are there. What is not needed is the solemn register built to
+create urgency: "blocks all progress", "non-negotiable", "immediate action required", "determines
+success or failure", bold used to raise the voice. If everything sounds critical, nothing stands out
+as actually critical. A serious thing is said once, plainly, and then you move on.
 
 ---
 
-## Flusso di lavoro
+## Workflow
 
-1. Le funzionalità di dimensione media o grande si specificano con spec-kit prima
-   dell'implementazione, seguendo il flusso `specify → clarify → plan → tasks → analyze →
-   implement`. I fix puntuali e le modifiche minori procedono direttamente. Dentro il flusso,
-   `implement` è l'unico passaggio che crea o modifica codice di produzione.
-2. Le decisioni di design significative (modello dati, scelta di un adapter esterno, deviazioni
-   dai principi) si documentano nel piano e si verificano contro questa constitution
-   (Constitution Check).
-3. **Audit di qualità prima di chiudere il ciclo.** Al termine di ogni ciclo spec-kit, prima di
-   dichiararlo chiuso, si esegue un audit sul codice prodotto. Controlla almeno:
-   - dimensione dei file sotto soglia;
-   - copertura dei test almeno all'80 per cento, con la suite verde;
-   - assenza di placeholder e di funzionalità parziali presentate come complete;
-   - duplicazione di logica, e logica finita nel client invece che nel backend;
-   - dettagli di fornitori esterni usciti dal loro adapter;
-   - segreti, lingua del codice, aderenza ai principi della constitution.
+1. Medium and large features are specified with spec-kit before implementation, following the flow
+   `specify → clarify → plan → tasks → analyze → implement`. Focused fixes and minor changes proceed
+   directly. Inside the flow, `implement` is the only step that creates or modifies production code.
+2. Significant design decisions (data model, choice of an external adapter, deviations from the
+   principles) are documented in the plan and checked against this constitution (Constitution
+   Check).
+3. **Quality audit before closing the cycle.** At the end of every spec-kit cycle, before declaring
+   it closed, an audit runs over the code produced. It checks at least:
+   - file size under the threshold;
+   - test coverage at 80% or above, with the suite green;
+   - no placeholders and no partial features presented as complete;
+   - duplicated logic, and logic that leaked into a client instead of the backend;
+   - external provider details that escaped their adapter;
+   - secrets, language of the code, adherence to the constitution's principles.
 
-   I problemi trovati si rifattorizzano prima della chiusura. Il ciclo non si dichiara chiuso
-   finche restano aperti. Se un problema non è risolvibile nel ciclo, l'eccezione va motivata e
-   approvata, e diventa un task registrato con la sua scadenza.
-4. Le modifiche allo schema del database si applicano prima del codice che le usa.
-5. Il deploy sull'ambiente di sviluppo avviene dopo ogni funzionalità completata, per la
-   validazione, prima della promozione in produzione.
+   Whatever the audit finds is refactored before closing. The cycle is not declared closed while
+   findings remain open. If something cannot be resolved within the cycle, the exception is
+   justified and approved, and becomes a recorded task with a deadline.
+4. Database schema changes are applied before the code that uses them.
+5. Deployment to the development environment happens after every completed feature, for validation,
+   before promotion to production.
 
-## Governo
+## Governance
 
-- La constitution ha precedenza sulle altre pratiche di sviluppo.
-- Le modifiche richiedono motivazione documentata, approvazione, e un piano di migrazione se
-  rompono qualcosa di esistente.
-- Ogni pull request e ogni revisione verificano la conformità ai principi. Le violazioni si
-  giustificano nel piano e si fanno approvare.
-- La complessità aggiunta si motiva con un caso d'uso concreto.
-- Le divergenze fra i documenti si segnalano, non si assorbono in silenzio.
-- Versionamento: patch per un chiarimento, minor per un principio o una sezione aggiunti, major
-  per un principio rimosso o ridefinito in modo incompatibile. In testa al file si tiene un Sync
-  Impact Report con il cambio di versione e cosa è cambiato.
+- The constitution takes precedence over other development practices.
+- Changes require a documented rationale, approval, and a migration plan if they break something
+  existing.
+- Every pull request and every review checks compliance with the principles. Violations are
+  justified in the plan and approved.
+- Added complexity is justified with a concrete use case.
+- Divergences between documents are flagged, not silently absorbed.
+- Versioning: patch for a clarification, minor for an added principle or section, major for a
+  principle removed or redefined incompatibly. A Sync Impact Report at the top of the file records
+  the version change and what changed.
 
-**Versione**: 1.1.0 | **Ratificata**: [DATA] | **Ultima modifica**: [DATA]
+**Version**: 2.0.0 | **Ratified**: [DATE] | **Last amended**: [DATE]
