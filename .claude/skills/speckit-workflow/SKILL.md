@@ -9,13 +9,13 @@ activation: when discussing feature implementation or spec-kit commands
 
 | # | Command | Purpose |
 |---|---------|---------|
-| 1 | `/speckit.constitution` | Define project principles (done once per project) |
-| 2 | `/speckit.specify` | Create feature specification (user stories, requirements, success criteria) |
-| 3 | `/speckit.clarify` | Resolve ambiguities before technical planning |
-| 4 | `/speckit.plan` | Technical plan (stack, file structure, architectural decisions) |
-| 5 | `/speckit.tasks` | Generate executable task list with dependencies and phases |
-| 6 | `/speckit.analyze` | Verify consistency: spec ↔ plan ↔ tasks |
-| 7 | `/speckit.implement` | **THE ONLY command that generates/modifies production code** |
+| 1 | `/speckit-constitution` | Define project principles (done once per project) |
+| 2 | `/speckit-specify` | Create feature specification (user stories, requirements, success criteria) |
+| 3 | `/speckit-clarify` | Resolve ambiguities before technical planning |
+| 4 | `/speckit-plan` | Technical plan (stack, file structure, architectural decisions) |
+| 5 | `/speckit-tasks` | Generate executable task list with dependencies and phases |
+| 6 | `/speckit-analyze` | Verify consistency: spec ↔ plan ↔ tasks |
+| 7 | `/speckit-implement` | **THE ONLY command that generates/modifies production code** |
 | 8 | Quality audit | Verify the produced code before declaring the cycle closed |
 
 ## Core Rule
@@ -23,11 +23,11 @@ activation: when discussing feature implementation or spec-kit commands
 Medium and large features go through this workflow. Small, focused fixes and minor changes
 may proceed directly (see CLAUDE.md for where the line sits).
 
-Within the workflow, `/speckit.implement` is the **only** step authorized to create or modify
+Within the workflow, `/speckit-implement` is the **only** step authorized to create or modify
 files in production source directories (`src/`, `apps/`, `shared/`, `infra/`, `.github/`).
 
 If the user asks "implement X" (a feature) without existing spec/plan/tasks:
-> "To implement X I need the spec first. Shall I launch `/speckit.specify`?"
+> "To implement X I need the spec first. Shall I launch `/speckit-specify`?"
 
 ## specs/ folder structure
 
@@ -61,7 +61,7 @@ specs/NNN-feature-slug/
 - `[ ]` = pending task
 - Phases in order: Setup → Foundational → Feature core → Frontend → Polish → Deploy
 
-## Prerequisites checklist before `/speckit.implement`
+## Prerequisites checklist before `/speckit-implement`
 
 Before running implement, verify that these exist:
 - `specs/NNN-slug/spec.md` ✅
@@ -76,16 +76,16 @@ If even one is missing → ask to complete the workflow first.
 Before proceeding I verify that spec/plan/tasks exist for "X".
 
 [if they exist]
-Found specs/NNN-X/ with plan and tasks. Proceed with /speckit.implement?
+Found specs/NNN-X/ with plan and tasks. Proceed with /speckit-implement?
 
 [if they don't exist]
-No spec found for "X". Shall I launch /speckit.specify to create it?
+No spec found for "X". Shall I launch /speckit-specify to create it?
 I'll need: feature description, user goal, constraints.
 ```
 
 ## Step 8 — quality audit
 
-`/speckit.implement` finishing is not the end of the cycle. Audit the code that was produced:
+`/speckit-implement` finishing is not the end of the cycle. Audit the code that was produced:
 
 - no file over 500 lines
 - coverage at 80% or above, suite green

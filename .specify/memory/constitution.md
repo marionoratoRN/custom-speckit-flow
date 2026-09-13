@@ -4,14 +4,14 @@ Modified (Language): everything in the repository is English, including governan
 commit messages and pull request descriptions. Two exceptions: conversation with the team, and
 strings shown to the end user.
 Modified: the whole file is now written in English, as the rule requires.
-Note: the "Project principles" section is still to be filled in with /speckit.constitution.
+Note: the "Project principles" section is still to be filled in with /speckit-constitution.
 -->
 
 # Project Constitution
 
 > This file has two parts. **General development rules**, **Workflow** and **Governance** are the
 > shared baseline across projects: they are preserved when the file is regenerated with
-> `/speckit.constitution`. **Project principles** is the part to fill in, and the part that changes
+> `/speckit-constitution`. **Project principles** is the part to fill in, and the part that changes
 > from one project to the next.
 >
 > Every spec, plan and task aligns with both parts.
@@ -20,7 +20,7 @@ Note: the "Project principles" section is still to be filled in with /speckit.co
 
 ## Project principles
 
-<!-- To be filled in with /speckit.constitution.
+<!-- To be filled in with /speckit-constitution.
      This is where the domain dependent principles go: what comes first, what is never done, which
      legal or product constraints govern the choices. Number them in roman numerals (I, II, III...)
      and write each one as a verifiable rule, not as an intention. -->
@@ -398,6 +398,22 @@ as actually critical. A serious thing is said once, plainly, and then you move o
 1. Medium and large features are specified with spec-kit before implementation, following the flow
    `specify → clarify → plan → tasks → analyze → implement`. Focused fixes and minor changes proceed
    directly. Inside the flow, `implement` is the only step that creates or modifies production code.
+
+   **Spec-kit artifacts are produced by spec-kit and never written by hand.** `spec.md`, `plan.md`,
+   `tasks.md` and the checklists come into existence by running the command that produces them.
+   Writing one by hand in the shape a command produces is forbidden even when the result would look
+   identical, and especially then.
+
+   The reason is not process worship. An artifact that looks generated carries an implicit claim:
+   that a process ran, that its checks were applied, that its questions were asked. A hand-written
+   `tasks.md` with numbered phases makes that claim without it being true, and nobody rereads a
+   document that looks finished. The danger is not that it is wrong, it is that it is trusted. The
+   commands also carry checks of their own, a specification quality checklist among them, and a
+   hand-written artifact silently skips all of them.
+
+   **If a command does not exist in this project, stop and say so.** Do not reproduce what it would
+   have done and do not describe the output as though the command had run. A missing command is a
+   setup problem to fix once, not an obstacle to work around on every feature.
 2. **A spec is written just before its feature is built.** A spec written far ahead of its
    implementation is a **sketch**, and it says so at the top, with the date it was written and an
    instruction to refresh it before planning. What holds intent durably is the backlog entry; a spec

@@ -1,11 +1,26 @@
 # Project Development Guidelines
 
+## CORE RULE: SPEC-KIT ARTIFACTS ARE PRODUCED BY SPEC-KIT
+
+`spec.md`, `plan.md`, `tasks.md` and the checklists come into existence by running the command that
+produces them. **Writing one by hand, in the shape a command produces, is forbidden** even when the
+result would look identical, and especially then.
+
+An artifact that looks generated carries an implicit claim: that a process ran, that its checks were
+applied, that its questions were asked. A hand-written `tasks.md` with numbered phases makes that
+claim without it being true, and nobody rereads a document that looks finished. The danger is not
+that it is wrong, it is that it is trusted.
+
+**If a command does not exist in the project, stop and say so.** Do not reproduce what it would have
+done, and do not describe the output as though it had run. A missing command is a setup problem to
+fix once, not an obstacle to work around on every feature.
+
 ## CORE RULE: SPEC-KIT FOR ANYTHING NON-TRIVIAL
 
 Medium and large features MUST go through the spec-kit workflow before implementation.
 Small, focused fixes and minor changes may proceed directly.
 
-Inside the workflow, `/speckit.implement` is the only step that creates or modifies
+Inside the workflow, `/speckit-implement` is the only step that creates or modifies
 production code.
 
 ### Use spec-kit when the change:
@@ -29,22 +44,22 @@ production code.
 - Explaining specs and proposing improvements to them
 
 ### The workflow:
-1. `/speckit.constitution` — define project principles (once per project)
-2. `/speckit.specify` — create feature specification
-3. `/speckit.clarify` — resolve ambiguities (optional but recommended)
-4. `/speckit.plan` — create technical plan
-5. `/speckit.tasks` — generate task list
-6. `/speckit.analyze` — verify consistency (optional)
-7. `/speckit.implement` — THE ONLY command that generates/modifies production code
+1. `/speckit-constitution` — define project principles (once per project)
+2. `/speckit-specify` — create feature specification
+3. `/speckit-clarify` — resolve ambiguities (optional but recommended)
+4. `/speckit-plan` — create technical plan
+5. `/speckit-tasks` — generate task list
+6. `/speckit-analyze` — verify consistency (optional)
+7. `/speckit-implement` — THE ONLY command that generates/modifies production code
 8. **Quality audit** — before declaring the cycle closed
 
-If the user asks to implement a feature, respond: "Launching /speckit.implement to proceed with the implementation."
+If the user asks to implement a feature, respond: "Launching /speckit-implement to proceed with the implementation."
 
 **EXCEPTION**: The user can explicitly say "write the code directly" or "do it without spec-kit" to bypass the workflow for a change that would otherwise need it.
 
 ### Step 8 — quality audit before closing
 
-A cycle is not closed when `/speckit.implement` finishes. Audit the code that was produced and
+A cycle is not closed when `/speckit-implement` finishes. Audit the code that was produced and
 check at least:
 
 - no file over 500 lines

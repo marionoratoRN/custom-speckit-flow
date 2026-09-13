@@ -1,6 +1,6 @@
 # Spec Backlog
 
-> List of planned features not yet specced. Run `/speckit.specify <feature-name>` to turn any of these into a full spec.
+> List of planned features not yet specced. Run `/speckit-specify <feature-name>` to turn any of these into a full spec.
 
 ## Planned Features
 
