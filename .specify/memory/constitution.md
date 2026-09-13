@@ -83,6 +83,40 @@ Never placeholder features, fake integrations, unimplemented options or partial 
 as complete. Every element visible in the interface works. If something is not ready, it does not
 appear in the menu.
 
+### The navigation is designed once, not accumulated
+
+A confusing admin panel is not a matter of taste, it is a structural outcome. Each feature adds its
+own menu entry wherever it seems to fit, nobody owns the whole, and after thirty features the menu
+is thirty uncoordinated decisions. What that produces is always the same: the same function
+reachable from two places, two pages that do almost the same thing because the second one did not
+know about the first, and functions buried three levels deep where nobody finds them again.
+
+The rules that prevent it:
+
+- **One navigation map, and it is the source of truth.** A single versioned file declares every
+  section, every entry, the route it points at and what it is for. The interface builds its menu
+  from that file, never from routes discovered around the codebase. A screen that is not in the map
+  does not exist; an entry in the map with no screen is a bug. **An automated test enumerates the
+  application's routes and fails when the two disagree.** This is what makes a duplicate visible in
+  a diff instead of six months later.
+- **Two levels, not three.** Every function is reachable in at most two steps from the home: a
+  section, then a page. A third level requires a recorded exception with its reason. Depth is the
+  mechanism by which a working feature becomes an invisible one.
+- **One home per capability.** A capability lives in exactly one place. Shortcuts from elsewhere are
+  welcome, but they link to that place and never reimplement it. Two pages that do almost the same
+  thing are one page that someone has not merged yet.
+- **Sections are named after what people do, not after how the code is organised.** A menu that
+  mirrors the module structure is a menu designed for the people who wrote the code. The words come
+  from the vocabulary the users already use for their own work.
+- **A spec that adds a screen says where it goes.** Its position in the map, and what moves, merges
+  or disappears as a result. The question is answered while specifying, not discovered while
+  implementing. The default answer to "this needs a page" is "inside an existing page", and a new
+  entry has to earn itself.
+- **The quality audit checks it.** No route outside the map, nothing deeper than allowed, no two
+  entries with the same purpose, and one person who has never seen the application finds five named
+  functions without being told where they are. That last check is the only one that needs a human
+  and it takes five minutes.
+
 ### New dependencies
 
 No framework, ORM, UI library or dependency is introduced without a concrete need that cannot be
@@ -330,6 +364,8 @@ as actually critical. A serious thing is said once, plainly, and then you move o
    - no placeholders and no partial features presented as complete;
    - duplicated logic, and logic that leaked into a client instead of the backend;
    - external provider details that escaped their adapter;
+   - the navigation: no route outside the map, nothing too deep, no two entries with the same
+     purpose, and five named functions found by someone who has not seen the application;
    - secrets, language of the code, adherence to the constitution's principles.
 
    Whatever the audit finds is refactored before closing. The cycle is not declared closed while
